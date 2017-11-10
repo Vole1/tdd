@@ -24,7 +24,7 @@ namespace TagsCloudVisualization
 
 		[TestCase(20, 10)]
 		[TestCase(30, 90)]
-		public void ForValidSizeOfRectangle_GetNewCoordinates_Returns_ValidPositionOfFirstRectangle(int width, int height)
+		public void ForValidSizeOfFirsRectangle_GetNewCoordinates_Returns_ValidPosition(int width, int height)
 		{
 			var rectangleSize = new Size(width, height);
 			var rectangleLocationShouldBe = new Point(ccl.Center.X - (int)Math.Round(width / 2.0), ccl.Center.Y - (int)Math.Round(height / 2.0));
@@ -64,7 +64,7 @@ namespace TagsCloudVisualization
 
 		[TestCase(20, 10)]
 		[TestCase(300, 400)]
-		public void AfterFirstRectangleAddition_PutNextRectangle_RegistersRectangle(int width, int height)
+		public void DuringFirstRectangleAddition_PutNextRectangle_RegistersRectangle(int width, int height)
 		{
 			var rectangleLocation = ccl.PutNextRectangle(new Size(width, height)).Location;
 			for (var x = rectangleLocation.X; x < rectangleLocation.X + width; x++)
@@ -76,7 +76,7 @@ namespace TagsCloudVisualization
 		[TestCase(600, 740, 280, 470)]
 		[TestCase(260, 310, 320, 420)]
 		[TestCase(35, 55, 135, 155)]
-		public void ForBusyPixels_CheckPixelsAreFree_ReturnsFalseForSameRectangles(int minX, int maxX, int minY, int maxY)
+		public void ForSameRectangles_CheckPixelsAreFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
@@ -88,7 +88,7 @@ namespace TagsCloudVisualization
 		[TestCase(600, 740, 280, 470)]
 		[TestCase(260, 310, 320, 420)]
 		[TestCase(35, 55, 135, 155)]
-		public void ForBusyPixels_CheckPixelsAreFree_ReturnsFalseForBiggerRectangles(int minX, int maxX, int minY, int maxY)
+		public void ForBiggerRectangles_CheckPixelsAreFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
@@ -100,7 +100,7 @@ namespace TagsCloudVisualization
 		[TestCase(600, 740, 280, 470)]
 		[TestCase(260, 310, 320, 420)]
 		[TestCase(35, 55, 135, 155)]
-		public void ForBusyPixels_CheckPixelsAreFree_ReturnsFalseForSmallerRectangles(int minX, int maxX, int minY, int maxY)
+		public void ForSmallerRectangles_CheckPixelsAreFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
@@ -112,17 +112,13 @@ namespace TagsCloudVisualization
 		[TestCase(400, 440, 300, 320)]
 		[TestCase(250, 300, 300, 400)]
 		[TestCase(10, 20, 10, 20)]
-		public void ForBusyBoundaries_CheckRectangleBoundariesAreFree_ReturnsFalseForBothBoundaries(int minX, int maxX, int minY, int maxY)
+		public void ForBothBoundariesOfSameRectangle_CheckRectangleBoundariesAreFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
 			var rectangleSize = new Size(maxX - minX, maxY - minY);
 			ccl.CheckRectangleBoundariesAreFree(minX, maxX, rectangleSize, minY, maxY, true).Should().BeFalse();
 			ccl.CheckRectangleBoundariesAreFree(minY, maxY, rectangleSize, minX, maxX, false).Should().BeFalse();
-
-			var SmallerRectangleSize = new Size(maxX - minX - 2, maxY - minY - 2);
-			ccl.CheckRectangleBoundariesAreFree(minX + 1, maxX - 2, SmallerRectangleSize, minY + 1, maxY - 2, true).Should().BeFalse();
-			ccl.CheckRectangleBoundariesAreFree(minY + 1, maxY - 2, SmallerRectangleSize, minX + 1, maxX - 2, false).Should().BeFalse();
 		}
 
 		[TestCase(400, 440, 300, 320)]
@@ -137,10 +133,11 @@ namespace TagsCloudVisualization
 			ccl.CheckRectangleBoundariesAreFree(minY - 1, maxY, BiggerRectangleSize, minX - 1, maxX, false).Should().BeTrue();
 		}
 
+
 		[TestCase(400, 440, 300, 320)]
 		[TestCase(250, 300, 300, 400)]
 		[TestCase(10, 20, 10, 20)]
-		public void ForFreeBoundaries_CheckRectangleInsideisFree_ReturnsFalseForRectangleOverPrevious(int minX, int maxX, int minY, int maxY)
+		public void ForRectangleOverPrevious_CheckRectangleInsideIsFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
@@ -150,11 +147,11 @@ namespace TagsCloudVisualization
 		[TestCase(400, 440, 300, 320)]
 		[TestCase(250, 300, 300, 400)]
 		[TestCase(10, 20, 10, 20)]
-		public void CheckRectangleInsideisFree_ReturnsFalseForRectangleInsidePrevious(int minX, int maxX, int minY, int maxY)
+		public void ForRectangleInsidePrevious_CheckRectangleInsideIsFree_ReturnsFalse(int minX, int maxX, int minY, int maxY)
 		{
 			PrepairForTestingBoundaryCheckingMethod(minX, maxX, minY, maxY);
 
-			ccl.CheckRectangleInsideIsFree(minX + 1, maxX - 2, minY + 2, maxY - 1, 5).Should().BeFalse();
+			ccl.CheckRectangleInsideIsFree(minX + 3, maxX - 4, minY + 3, maxY - 4, 5).Should().BeFalse();
 		}
 
 		[TestCase(70)]
