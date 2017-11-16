@@ -30,7 +30,6 @@ namespace TagsCloudVisualization
 		public static void Visualize(IEnumerable<Size> sizes)
 		{
 			var ccl = new CircularCloudLayouter(center);
-			ccl.BmpResolution = resolution;
 			foreach (var size in sizes)
 			{
 				var rect = ccl.PutNextRectangle(size);

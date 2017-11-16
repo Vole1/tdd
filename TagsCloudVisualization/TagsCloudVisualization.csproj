@@ -58,10 +58,10 @@
   <ItemGroup>
     <Compile Include="CircularCloudLayouter.cs" />
     <Compile Include="CircularCloudLayouterTests.cs" />
-    <Compile Include="CircularCloudLayouterTestsBase.cs" />
+    <Compile Include="CommonUsefulMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadiusAndAngleData.cs" />
+    <Compile Include="Spiral.cs" />
     <Compile Include="Visualizer.cs" />
   </ItemGroup>
   <ItemGroup>
